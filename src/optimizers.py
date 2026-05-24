@@ -20,7 +20,7 @@ class SGD:
         # TODO: params[key]를 gradient 반대 방향으로 업데이트하세요.
         for key in params:
             params[key] -= self.lr * grads[key]
-        raise NotImplementedError("SGD.update를 구현하세요.")
+        # raise NotImplementedError("SGD.update를 구현하세요.")
 
 
 class Adam:
