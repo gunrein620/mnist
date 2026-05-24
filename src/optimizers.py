@@ -59,4 +59,4 @@ class Adam:
 
             # update
             params[key] -= self.lr * m_hat / (np.sqrt(v_hat) + eps)
-        raise NotImplementedError("Adam.update를 구현하세요.")
+        # raise NotImplementedError("Adam.update를 구현하세요.")
