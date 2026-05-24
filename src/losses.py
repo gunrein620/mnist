@@ -17,7 +17,7 @@ def cross_entropy_loss(y_pred, y_true):
     y_pred = np.clip(y_pred, 1e-7, 1.0)
 
     # 정답 위치의 확률만 골라냄
-    log_probs = np.log(y_pred[np.arrange(batch_size), y_true])
+    log_probs = np.log(y_pred[np.arange(batch_size), y_true])
 
     return -np.sum(log_probs) / batch_size
     raise NotImplementedError("cross_entropy_loss를 구현하세요.")
