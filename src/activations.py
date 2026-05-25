@@ -62,7 +62,7 @@ class Softmax:
         # TODO: 수치 안정성을 위해 row별 max를 뺀 뒤 softmax 확률을 계산하세요.
         # 힌트: np.max(..., axis=1, keepdims=True), np.exp, np.sum을 사용합니다.
         x = x - np.max(x, axis=1, keepdims=True)
-        exp_x = np.ext(x)
+        exp_x = np.exp(x)
         return exp_x / np.sum(exp_x, axis=1, keepdims=True)
         raise NotImplementedError("Softmax.forward를 구현하세요.")
 
