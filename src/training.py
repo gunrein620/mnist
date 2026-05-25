@@ -18,35 +18,46 @@ def train(model, optimizer, x_train, y_train, epochs=20, batch_size=128):
     Returns:
         loss_history: epoch별 평균 손실 리스트
     """
+    # TODO: epoch마다 데이터를 섞고, batch 단위로 forward/loss/backward/update를 수행하세요.
+    # 힌트: Softmax + CrossEntropy 결합 gradient는 y_pred copy에서 정답 위치에 1을 빼서 만듭니다.
     loss_history = []
-    train_size = x_train.shape[0]
+    n = x_train.shape[0]  # 60000
 
-    for _ in range(epochs):
-        indices = np.random.permutation(train_size)
-        epoch_loss = 0.0
-        batch_count = 0
+    for epoch in range(epochs):
+        # 데이터 섞기
+        idx = np.random.permutation(n)
+        x_train = x_train[idx]
+        y_train = y_train[idx]
 
-        for start in range(0, train_size, batch_size):
-            batch_indices = indices[start : start + batch_size]
-            x_batch = x_train[batch_indices]
-            y_batch = y_train[batch_indices]
+        epoch_loss = 0
+        n_batches = n // batch_size
 
+        for i in range(n_batches):
+            # 배치 자르기
+            x_batch = x_train[i*batch_size:(i+1)*batch_size]
+            y_batch = y_train[i*batch_size:(i+1)*batch_size]
+
+            # 1. forward
             y_pred = model.forward(x_batch, train=True)
+
+            # 2. loss
             loss = cross_entropy_loss(y_pred, y_batch)
+            epoch_loss += loss
 
+            # 3. backward gradient 만들기
             dout = y_pred.copy()
-            dout[np.arange(y_batch.shape[0]), y_batch] -= 1
-            dout /= y_batch.shape[0]
-
+            dout[np.arange(batch_size), y_batch] -= 1
+            dout /= batch_size
             model.backward(dout)
+
+            # 4. update
             optimizer.update(model.params, model.grads)
 
-            epoch_loss += loss
-            batch_count += 1
-
-        loss_history.append(epoch_loss / batch_count)
+        loss_history.append(epoch_loss / n_batches)
+        print(f"Epoch {epoch+1}/{epochs}  loss: {epoch_loss/n_batches:.4f}")
 
     return loss_history
+    # raise NotImplementedError("train을 구현하세요.")
 
 
 def evaluate(model, x, y):
