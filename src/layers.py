@@ -33,7 +33,8 @@ class Affine:
             (batch_size, output_dim)
         """
         # TODO: backward에서 사용할 입력 x를 저장하고 x @ W + b를 반환하세요.
-        raise NotImplementedError("Affine.forward를 구현하세요.")
+        self.x = x  # backward에서 dW와 dx를 계산하려고 입력을 보관합니다.
+        return x @ self.W + self.b  # 완전연결층의 선형 변환입니다.
 
     def backward(self, dout):
         """
@@ -48,7 +49,10 @@ class Affine:
         """
         # TODO: self.dW, self.db, dx를 계산하세요.
         # 힌트: dW = x.T @ dout, db = batch 방향 합, dx = dout @ W.T
-        raise NotImplementedError("Affine.backward를 구현하세요.")
+        self.dW = self.x.T @ dout  # W는 입력 feature와 출력 gradient를 곱해 구합니다.
+        self.db = np.sum(dout, axis=0)  # b는 batch 방향으로 같은 값이 더해졌으므로 합산합니다.
+        dx = dout @ self.W.T  # 이전 층으로 보낼 gradient입니다.
+        return dx
 
 
 class BatchNorm:
