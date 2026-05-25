@@ -26,9 +26,8 @@ class ReLU:
         Returns:
             x와 같은 shape. x > 0인 위치만 원래 값을 유지합니다.
         """
-        # TODO: x > 0 위치를 self.mask에 저장하고, 음수/0 위치는 0으로 바꾸세요.
-        self.mask = x > 0  # True인 위치만 forward/backward에서 값을 통과시킵니다.
-        return x * self.mask  # x <= 0인 위치는 mask가 False라서 0이 됩니다.
+        self.mask = x > 0
+        return np.where(self.mask, x, 0)
 
     def backward(self, dout):
         """
@@ -38,8 +37,7 @@ class ReLU:
         Returns:
             ReLU 입력 x에 대한 gradient. forward 때 x <= 0이었던 위치는 0입니다.
         """
-        # TODO: forward에서 저장한 self.mask를 이용해 gradient가 흐를 위치만 남기세요.
-        return dout * self.mask  # forward 때 켜져 있던 위치로만 gradient를 흘립니다.
+        return dout * self.mask
 
 
 class Softmax:
@@ -58,11 +56,9 @@ class Softmax:
         Returns:
             (batch_size, num_classes) 확률. 각 행의 합은 1입니다.
         """
-        # TODO: 수치 안정성을 위해 row별 max를 뺀 뒤 softmax 확률을 계산하세요.
-        # 힌트: np.max(..., axis=1, keepdims=True), np.exp, np.sum을 사용합니다.
-        shifted_x = x - np.max(x, axis=1, keepdims=True)  # 큰 logit에서 exp overflow가 나는 것을 막습니다.
-        exp_x = np.exp(shifted_x)
-        self.out = exp_x / np.sum(exp_x, axis=1, keepdims=True)  # 각 행의 합이 1인 확률 분포입니다.
+        shifted = x - np.max(x, axis=1, keepdims=True)
+        exp_x = np.exp(shifted)
+        self.out = exp_x / np.sum(exp_x, axis=1, keepdims=True)
         return self.out
 
     def backward(self, dout):
@@ -70,5 +66,4 @@ class Softmax:
         Softmax와 Cross Entropy를 함께 미분한 gradient를 train()에서 직접 만들기 때문에
         여기서는 받은 gradient를 그대로 통과시킵니다.
         """
-        # TODO: train()에서 만든 gradient를 그대로 반환하세요.
-        return dout  # Softmax+CrossEntropy 결합 gradient를 train()에서 이미 만들었습니다.
+        return dout

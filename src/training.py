@@ -18,34 +18,33 @@ def train(model, optimizer, x_train, y_train, epochs=20, batch_size=128):
     Returns:
         loss_history: epoch별 평균 손실 리스트
     """
-    # TODO: epoch마다 데이터를 섞고, batch 단위로 forward/loss/backward/update를 수행하세요.
-    # 힌트: Softmax + CrossEntropy 결합 gradient는 y_pred copy에서 정답 위치에 1을 빼서 만듭니다.
-    loss_history = []  # epoch마다 평균 loss를 기록합니다.
-    num_train = x_train.shape[0]  # 전체 학습 샘플 수입니다.
+    loss_history = []
+    train_size = x_train.shape[0]
 
     for _ in range(epochs):
-        indices = np.random.permutation(num_train)  # 매 epoch마다 데이터 순서를 섞습니다.
-        epoch_loss = 0.0  # batch loss를 샘플 수 기준으로 누적합니다.
+        indices = np.random.permutation(train_size)
+        epoch_loss = 0.0
+        batch_count = 0
 
-        for start in range(0, num_train, batch_size):
-            batch_indices = indices[start : start + batch_size]  # 이번 batch에 사용할 인덱스입니다.
+        for start in range(0, train_size, batch_size):
+            batch_indices = indices[start : start + batch_size]
             x_batch = x_train[batch_indices]
             y_batch = y_train[batch_indices]
-            batch_len = x_batch.shape[0]  # 마지막 batch는 batch_size보다 작을 수 있습니다.
 
-            y_pred = model.forward(x_batch, train=True)  # 순전파로 클래스 확률을 구합니다.
-            loss = cross_entropy_loss(y_pred, y_batch)  # 현재 batch의 평균 손실입니다.
+            y_pred = model.forward(x_batch, train=True)
+            loss = cross_entropy_loss(y_pred, y_batch)
 
-            dout = y_pred.copy()  # Softmax + CrossEntropy의 출력층 gradient를 만듭니다.
-            dout[np.arange(batch_len), y_batch] -= 1  # 정답 클래스 위치만 1을 뺍니다.
-            dout /= batch_len  # batch 평균 gradient로 맞춥니다.
+            dout = y_pred.copy()
+            dout[np.arange(y_batch.shape[0]), y_batch] -= 1
+            dout /= y_batch.shape[0]
 
-            model.backward(dout)  # 역전파로 각 파라미터의 gradient를 계산합니다.
-            optimizer.update(model.params, model.grads)  # gradient 방향의 반대로 파라미터를 갱신합니다.
+            model.backward(dout)
+            optimizer.update(model.params, model.grads)
 
-            epoch_loss += loss * batch_len  # epoch 평균을 위해 샘플 수만큼 가중해 더합니다.
+            epoch_loss += loss
+            batch_count += 1
 
-        loss_history.append(epoch_loss / num_train)  # epoch 하나의 평균 loss입니다.
+        loss_history.append(epoch_loss / batch_count)
 
     return loss_history
 
