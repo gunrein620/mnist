@@ -71,7 +71,12 @@ Input(784)
 Forward -> Loss -> Backward -> Optimizer Update
 ```
 
-Softmax와 Cross Entropy를 결합해 출력층의 gradient를 계산한 뒤, 이를 `model.backward(dout)`으로 전달했다.
+- **Forward**: 입력 이미지를 모델에 넣어 예측값을 계산한다.
+- **Loss**: 예측값이 정답과 얼마나 다른지 Cross Entropy Loss로 계산한다.
+- **Backward**: 손실을 바탕으로 각 가중치를 어느 방향으로 고쳐야 할지 gradient를 계산한다.
+- **Update**: 계산된 gradient를 이용해 Adam optimizer가 가중치와 편향을 수정한다.
+
+즉, 문제를 풀고, 채점하고, 틀린 이유를 되짚은 다음, 다음에는 더 잘 풀도록 파라미터를 고치는 과정이다.
 
 ---
 
