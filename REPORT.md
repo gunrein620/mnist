@@ -83,9 +83,8 @@ Forward -> Loss -> Backward -> Optimizer Update
 | **Python** | Python 3.11 |
 | **주요 라이브러리** | NumPy, Matplotlib |
 | **테스트 도구** | Pytest |
-| **실행 환경** | Google Colab T4 GPU |
+| **실행 환경** | CPU |
 | **학습 소요 시간** | 약 4분 |
-| **단위 테스트 실행 시간** | 3.45초 |
 
 
 ---
@@ -97,14 +96,7 @@ Forward -> Loss -> Backward -> Optimizer Update
 | **테스트 정확도** | 98.54% |
 | **총 파라미터 수** | 537,354 |
 
-- 과제 권장 목표: 97% 이상
-- 최종 모델: **98.54%**로 목표 기준 달성
 
-테스트 결과:
-
-```text
-21 passed in 3.45s
-```
 
 <details>
 <summary>파라미터 수 계산</summary>
@@ -137,11 +129,11 @@ Total = 537,354
 
 ### 학습 곡선
 
-- 파란색 Training Loss는 epoch가 진행될수록 꾸준히 감소했다.
-- 주황색 Test Accuracy는 초반에 빠르게 상승한 뒤 98%대에서 안정적으로 유지되었다.
-- 초반에는 기본 숫자 패턴을 빠르게 학습해 loss가 크게 줄고 accuracy가 빠르게 올랐다.
-- 후반에는 쉬운 패턴을 이미 학습한 상태라 개선 폭이 작아져 완만한 변화가 나타났다.
-- 결론: 20 epoch 범위에서는 과적합이 크게 나타나지 않고 안정적으로 수렴했다.
+- epoch를 40까지 늘려 Training Loss와 Test Accuracy 변화를 함께 확인했다.
+- 파란색 Training Loss는 epoch가 증가할수록 계속 감소했다.
+- 주황색 Test Accuracy는 초반에 빠르게 상승한 뒤 98%대 중반에서 거의 유지되었다.
+- 중반 이후에는 training loss가 더 낮아져도 test accuracy 향상 폭은 작아졌다.
+- 결론: 심한 과적합은 보이지 않았지만, 일정 epoch 이후에는 추가 학습 효과가 점차 작아졌다.
 
 ![Training Loss and Test Accuracy Curve](assets/loss_accuracy_curve.png)
 
