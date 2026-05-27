@@ -135,13 +135,15 @@ Total = 537,354
 
 정리하면 가중치 초기화, 학습 안정화, 과적합 방지, 업데이트 안정성을 함께 챙기고자 했다.
 
-### 손실 커브
+### 학습 곡선
 
-- 초반: 명확하게 틀리던 예측이 빠르게 개선되어 loss가 크게 감소
-- 후반: 쉬운 패턴은 이미 학습되어 개선 폭이 작아지고 loss가 완만하게 감소
-- 결론: 모델이 정상적으로 수렴하는 흐름 확인
+- 파란색 Training Loss는 epoch가 진행될수록 꾸준히 감소했다.
+- 주황색 Test Accuracy는 초반에 빠르게 상승한 뒤 98%대에서 안정적으로 유지되었다.
+- 초반에는 기본 숫자 패턴을 빠르게 학습해 loss가 크게 줄고 accuracy가 빠르게 올랐다.
+- 후반에는 쉬운 패턴을 이미 학습한 상태라 개선 폭이 작아져 완만한 변화가 나타났다.
+- 결론: 20 epoch 범위에서는 과적합이 크게 나타나지 않고 안정적으로 수렴했다.
 
-![Training Loss Curve](assets/loss_curve.png)
+![Training Loss and Test Accuracy Curve](assets/loss_accuracy_curve.png)
 
 ---
 
