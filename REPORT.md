@@ -13,7 +13,7 @@
 
 - PyTorch, TensorFlow 없이 **NumPy만으로 MNIST 손글씨 숫자 분류기 구현**
 - Affine, ReLU, Softmax, Loss, Optimizer, BatchNorm, Dropout, 학습 루프 직접 구현
-- 핵심 목표: 정확도뿐 아니라 `Forward -> Loss -> Backward -> Update` 흐름 이해
+- 정확도뿐 아니라 `Forward -> Loss -> Backward -> Update` 흐름 이해
 
 ---
 
@@ -42,7 +42,6 @@ Input(784)
 -> Softmax
 ```
 
-은닉층 활성화 함수로 ReLU를 사용했기 때문에 가중치는 He initialization으로 초기화했다.
 
 ---
 
@@ -144,4 +143,4 @@ Total = 537,354
 - NumPy 배열 연산만으로 신경망의 주요 구성 요소를 직접 구현했다.
 - `forward`에서 저장한 값이 `backward`에서 gradient 계산에 다시 사용되는 흐름을 확인했다.
 - 학습 모드와 추론 모드에서 BatchNorm, Dropout 동작이 달라야 함을 확인했다.
-- Colab T4 GPU에서 약 4분 동안 20 epoch 학습 후 98.54% 정확도를 달성했다.
+- Colab 에서 약 4분 동안 20 epoch 학습 후 98.54% 정확도를 달성했다.
